@@ -133,29 +133,43 @@ void loop()
   roll = nunchuck_roll();
   pitch = nunchuck_pitch();
 
-  // A
-  if(accy > 80 && cbut)
-    a = LOW;
+  // A & START
+  if(cbut)
+    if(accy > 80)
+    {
+      Serial.println("A");
+      a = LOW;
+      start = HIGH;
+    }
+    else
+    {
+      Serial.println("START");
+      a = HIGH;
+      start = LOW;
+    }
   else
+  {
     a = HIGH;
-
-  // B
-  if(accy > 80 && zbut)
-    b = LOW;
-  else
-    b = HIGH;
-
-  // SELECT
-  if(accy <=80 && zbut)
-    select = LOW;
-  else
-    select = HIGH;
-
-  // START
-  if(accy <=80 && cbut)
-    start = LOW;
-  else
     start = HIGH;
+  }
+
+  // B & SELECT
+  if(zbut)
+    if(accy > 80)
+    {
+      b = LOW;
+      select = HIGH;
+    }
+    else
+    {
+      b = HIGH;
+      select = LOW;
+    }
+  else
+  {
+    b = HIGH;
+    select = HIGH;
+  }
 
   // UP
   if(joyy>182)
