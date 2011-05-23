@@ -32,6 +32,7 @@
 int loop_cnt = 0;
 
 byte joyx,joyy,zbut,cbut,roll,pitch,accx,accy,accz;
+byte a,b,select,start,up,down,left,right;
 
 int clock = 0; // set the clock pin (RED)
 int latch = 1; // set the latch pin (ORANGE)
@@ -54,67 +55,25 @@ void clockRising()
     switch(mode)
     {
       case 1: // B
-        if(accy > 80 && zbut)
-        {
-          //Serial.println("B");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, b);
         break;
       case 2: // SELECT
-        if(accy <=80 && zbut)
-        {
-          //Serial.println("SELECT");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, select);
         break;
       case 3: // START
-        if(accy <=80 && cbut)
-        {
-          //Serial.println("START");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, start);
         break;
       case 4: // UP
-        if(joyy>182)
-        {
-          //Serial.println("UP");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, up);
         break;
       case 5: // DOWN
-        if(joyy<89)
-        {
-          //Serial.println("DOWN");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, down);
         break;
       case 6: // LEFT
-        if(joyx<83)
-        {
-          //Serial.println("LEFT");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, left);
         break;
       case 7: // RIGHT
-        if(joyx>177)
-        {
-          //Serial.println("RIGHT");
-          digitalWrite(data, LOW);
-        }
-        else
-          digitalWrite(data, HIGH);
+        digitalWrite(data, right);
         break;
     }  
     mode++;
@@ -129,13 +88,7 @@ void latchRising()
 {
   mode = 1;
   // A button
-  if(accy > 80 && cbut)
-  {
-    //Serial.println("A");
-    digitalWrite(data, LOW);
-  }
-  else
-    digitalWrite(data, HIGH);
+  digitalWrite(data, a);
 }
 
 
@@ -179,6 +132,55 @@ void loop()
   accz = nunchuck_accelz();
   roll = nunchuck_roll();
   pitch = nunchuck_pitch();
+
+  // A
+  if(accy > 80 && cbut)
+    a = LOW;
+  else
+    a = HIGH;
+
+  // B
+  if(accy > 80 && zbut)
+    b = LOW;
+  else
+    b = HIGH;
+
+  // SELECT
+  if(accy <=80 && zbut)
+    select = LOW;
+  else
+    select = HIGH;
+
+  // START
+  if(accy <=80 && cbut)
+    start = LOW;
+  else
+    start = HIGH;
+
+  // UP
+  if(joyy>182)
+    up = LOW;
+  else
+    up = HIGH;
+
+  // DOWN
+  if(joyy<89)
+    down = LOW;
+  else
+    down = HIGH;
+
+  // LEFT
+  if(joyx<83)
+    left = LOW;
+  else
+    left = HIGH;
+
+  // RIGHT
+  if(joyx>177)
+    right = LOW;
+  else
+    right = HIGH;
+
 
 
   /*
@@ -233,5 +235,5 @@ void loop()
   //Serial.print("noob");
   //Serial.print((byte)joyy,DEC);
   //Serial.println();
-  //delay(100);
+  delay(10);
 } 
