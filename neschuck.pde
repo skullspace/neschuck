@@ -50,38 +50,38 @@ int buttons[16];
 
 void clockRising()
 {
-  if(mode > 0)
+  switch(mode)
   {
-    switch(mode)
-    {
-      case 1: // B
-        digitalWrite(data, b);
-        break;
-      case 2: // SELECT
-        digitalWrite(data, select);
-        break;
-      case 3: // START
-        digitalWrite(data, start);
-        break;
-      case 4: // UP
-        digitalWrite(data, up);
-        break;
-      case 5: // DOWN
-        digitalWrite(data, down);
-        break;
-      case 6: // LEFT
-        digitalWrite(data, left);
-        break;
-      case 7: // RIGHT
-        digitalWrite(data, right);
-        break;
-    }  
-    mode++;
-    if(mode == 8)
-    {
-      mode = 0;  
-    }
-  }
+    case 0: // pre-request
+      digitalWrite(data, a);
+      break;
+    case 1: // B
+      digitalWrite(data, b);
+      break;
+    case 2: // SELECT
+      digitalWrite(data, select);
+      break;
+    case 3: // START
+      digitalWrite(data, start);
+      break;
+    case 4: // UP
+      digitalWrite(data, up);
+      break;
+    case 5: // DOWN
+      digitalWrite(data, down);
+      break;
+    case 6: // LEFT
+      digitalWrite(data, left);
+      break;
+    case 7: // RIGHT
+      digitalWrite(data, right);
+      break;
+    case 8: // post-request
+      digitalWrite(data, a);
+      mode = 7;
+      break;
+  }  
+  mode++;
 }
 
 void latchRising()
