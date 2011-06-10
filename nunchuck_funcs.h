@@ -31,11 +31,45 @@ static void nunchuck_setpowerpins()
 // and tell the nunchuck we're talking to it
 static void nunchuck_init()
 { 
+    unsigned short timeout = 0;
     Wire.begin();                // join i2c bus as master
+    /*
     Wire.beginTransmission(0x52);// transmit to device 0x52
     Wire.send(0x40);// sends memory address
     Wire.send(0x00);// sends sent a zero.  
     Wire.endTransmission();// stop transmitting
+    */
+
+    /* Ben's version 
+    Wire.beginTransmission(0x52);// transmit to device 0x52
+    Wire.send(0xF0);// sends memory address
+    Wire.send(0x55);// sends sent a zero.  
+    Wire.endTransmission();// stop transmitting
+    /**/
+
+    /* the "new way" */
+    byte rc = 1;
+    unsigned long time = millis();
+    do
+    {
+      delay(2000);
+      Wire.beginTransmission (0x52);	// transmit to device 0x52
+      Wire.send (0xF0);		// sends memory address
+      Wire.send (0x55);		// sends data.  
+      if(Wire.endTransmission() == 0) // stop transmitting
+      {
+        Wire.beginTransmission (0x52);	// transmit to device 0x52
+        Wire.send (0xFB);		// sends memory address
+        Wire.send (0x00);		// sends sent a zero.  
+        if(Wire.endTransmission () == 0)	// stop transmitting
+        {
+          rc = 0;
+        }
+      }
+    }
+    while (rc != 0 && (!timeout || ((millis() - time) < timeout)));
+    /**/
+
 }
 
 // Send a request for data to the nunchuck
@@ -51,7 +85,7 @@ static void nunchuck_send_request()
 // only needed if you use one of the regular wiimote drivers
 static char nunchuk_decode_byte (char x)
 {
-    x = (x ^ 0x17) + 0x17;
+    //x = (x ^ 0x17) + 0x17;
     return x;
 }
 
