@@ -27,6 +27,7 @@
  */
 
 #include <Wire.h>
+#include "digitalWriteFast.h"
 #include "nunchuck_funcs.h"
 
 int loop_cnt = 0;
@@ -53,31 +54,58 @@ void clockRising()
   switch(mode)
   {
     case 0: // pre-request
-      digitalWrite(data, a);
+      if (a == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 1: // B
-      digitalWrite(data, b);
+      if (b == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 2: // SELECT
-      digitalWrite(data, select);
+      if (select == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 3: // START
-      digitalWrite(data, start);
+      if (start == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 4: // UP
-      digitalWrite(data, up);
+      if (up == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 5: // DOWN
-      digitalWrite(data, down);
+      if (down == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 6: // LEFT
-      digitalWrite(data, left);
+      if (left == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 7: // RIGHT
-      digitalWrite(data, right);
+      if (right == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       break;
     case 8: // post-request
-      digitalWrite(data, a);
+      if (a == HIGH)
+        digitalWriteFast(data, HIGH);
+      else
+        digitalWriteFast(data, LOW);
       mode = 7;
       break;
   }  
@@ -88,7 +116,10 @@ void latchRising()
 {
   mode = 1;
   // A button
-  digitalWrite(data, a);
+  if (a == HIGH)
+    digitalWriteFast(data, HIGH);
+  else
+    digitalWriteFast(data, LOW);
 }
 
 
@@ -110,6 +141,7 @@ void setup()
 
   nunchuck_setpowerpins();
   nunchuck_init(); // send the initilization handshake
+  Serial.println("Done setup");
 }
 
 /* PROGRAM */
@@ -133,17 +165,35 @@ void loop()
   roll = nunchuck_roll();
   pitch = nunchuck_pitch();
 
+  /*
+  Serial.print(" JX: ");
+  Serial.print(joyx,DEC);
+  Serial.print(" JY: ");
+  Serial.print(joyy,DEC);
+  Serial.print(" ZB: ");
+  Serial.print(zbut,DEC);
+  Serial.print(" CB: ");
+  Serial.print(cbut,DEC);
+  Serial.print(" AX: ");
+  Serial.print(accx,DEC);
+  Serial.print(" AY: ");
+  Serial.print(accy,DEC);
+  Serial.print(" AZ: ");
+  Serial.print(accz,DEC);
+  Serial.print("\n");
+  /**/
+
   // A & START
   if(cbut)
     if(accy > 80)
     {
-      Serial.println("A");
+      //Serial.println("A");
       a = LOW;
       start = HIGH;
     }
     else
     {
-      Serial.println("START");
+      //Serial.println("START");
       a = HIGH;
       start = LOW;
     }
@@ -157,11 +207,13 @@ void loop()
   if(zbut)
     if(accy > 80)
     {
+      //Serial.println("B");
       b = LOW;
       select = HIGH;
     }
     else
     {
+      //Serial.println("SELECT");
       b = HIGH;
       select = LOW;
     }
@@ -172,26 +224,38 @@ void loop()
   }
 
   // UP
-  if(joyy>182)
+  if(joyy>190)
+  {
+    //Serial.println("UP");
     up = LOW;
+  }
   else
     up = HIGH;
 
   // DOWN
-  if(joyy<89)
+  if(joyy<65)
+  {
+    //Serial.println("DOWN");
     down = LOW;
+  }
   else
     down = HIGH;
 
   // LEFT
-  if(joyx<83)
+  if(joyx<65)
+  {
+    //Serial.println("LEFT");
     left = LOW;
+  }
   else
     left = HIGH;
 
   // RIGHT
-  if(joyx>177)
+  if(joyx>190)
+  {
+    //Serial.println("RIGHT");
     right = LOW;
+  }
   else
     right = HIGH;
 
